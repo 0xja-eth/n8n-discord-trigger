@@ -8,6 +8,11 @@ export const options: INodeProperties[] = [
     type: 'options',
     options: [
       {
+        name: 'Direct Message',
+        value: 'direct-message',
+        description: 'When a direct message is sent to the bot',
+      },
+      {
         name: 'Message',
         value: 'message',
         description: 'When a message is sent in the selected channels',
@@ -122,7 +127,7 @@ export const options: INodeProperties[] = [
     type: 'options',
     displayOptions: {
       show: {
-        type: ['message'],
+        type: ['message', 'direct-message'],
       },
     },
     options: [
@@ -172,7 +177,7 @@ export const options: INodeProperties[] = [
     placeholder: 'e.g. !hello',
     displayOptions: {
       show: {
-        type: ['message'],
+        type: ['message', 'direct-message'],
         pattern: ['equal', 'start', 'contain', 'end', 'regex'],
       },
     },
@@ -186,7 +191,7 @@ export const options: INodeProperties[] = [
     type: 'boolean',
     displayOptions: {
       show: {
-        type: ['message'],
+        type: ['message', 'direct-message'],
       },
     },
 
@@ -199,7 +204,7 @@ export const options: INodeProperties[] = [
     type: 'boolean',
     displayOptions: {
       show: {
-        type: ['message'],
+        type: ['message', 'direct-message'],
       },
     },
 
