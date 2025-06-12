@@ -66,7 +66,7 @@ export class DiscordTrigger implements INodeType {
                     // @ts-ignore
                     throw new NodeOperationError('Please select at least one server before choosing channels.');
                 }
-                
+
 
                 return await getRolesHelper(this, selectedGuilds).catch((e) => e) as { name: string; value: string }[];
             },
@@ -79,7 +79,7 @@ export class DiscordTrigger implements INodeType {
 
         if (!credentials?.token) {
             console.log("No token given.");
-            
+
             return {};
         }
 
@@ -94,7 +94,7 @@ export class DiscordTrigger implements INodeType {
             });
 
             console.log("registering ", this.getNode().id, "... ", parameters);
-            
+
             ipc.of.bot.emit('triggerNodeRegistered', {
                 parameters,
                 active: this.getWorkflow().active,
@@ -104,15 +104,21 @@ export class DiscordTrigger implements INodeType {
 
             ipc.of.bot.on('messageCreate', ({ message, author, guild, nodeId, messageReference, attachments, referenceAuthor }: any) => {
                 if( this.getNode().id === nodeId) {
-                    
+
                     const messageCreateOptions : any = {
                         id: message.id,
-                        content: message.content,
-                        guildId: guild?.id,
-                        channelId: message.channelId,
-                        authorId: author.id,
-                        authorName: author.username,
+												content: message.content,
+												authorName: author.globalName,
+                        // content: message.content,
+                        // guildId: guild?.id,
+												// channelId: message.channelId,
+                        // authorId: author.id,
+												// authorName: author.username,
+												// globalName: author.globalName,
                         timestamp: message.createdTimestamp,
+												message,
+												guild,
+												author,
                         listenValue: this.getNodeParameter('value', ''),
                         authorIsBot: author.bot || author.system,
                         referenceId: null,
@@ -121,6 +127,7 @@ export class DiscordTrigger implements INodeType {
                         referenceAuthorName: null,
                         referenceTimestamp: null,
                     }
+										console.log("On Message Create", messageCreateOptions, author);
 
                     if(messageReference) {
                         messageCreateOptions.referenceId = messageReference.id;
@@ -147,7 +154,7 @@ export class DiscordTrigger implements INodeType {
                     ]);
                 }
             });
-            
+
             ipc.of.bot.on('guildMemberRemove', ({guildMember, guild, user, nodeId}) => {
                 if( this.getNode().id === nodeId) {
                     this.emit([
@@ -156,7 +163,7 @@ export class DiscordTrigger implements INodeType {
                 }
             });
 
-            
+
             ipc.of.bot.on('messageReactionAdd', ({messageReaction, message, user, guild, nodeId}) => {
                 if( this.getNode().id === nodeId) {
                     this.emit([
@@ -164,7 +171,7 @@ export class DiscordTrigger implements INodeType {
                     ]);
                 }
             });
-            
+
             ipc.of.bot.on('messageReactionRemove', ({messageReaction, message, user, guild, nodeId}) => {
                 if(this.getNode().id === nodeId) {
                     this.emit([
@@ -180,7 +187,7 @@ export class DiscordTrigger implements INodeType {
                     ]);
                 }
             });
-            
+
             ipc.of.bot.on('roleDelete', ({role, guild, nodeId}) => {
                 if( this.getNode().id === nodeId) {
                     this.emit([
@@ -188,13 +195,13 @@ export class DiscordTrigger implements INodeType {
                     ]);
                 }
             });
-            
+
             ipc.of.bot.on('roleUpdate', ({oldRole, newRole, guild, nodeId}) => {
                 if( this.getNode().id === nodeId) {
 
                     const addPrefix = (obj: any, prefix: string) =>
                         Object.fromEntries(Object.entries(obj).map(([key, value]) => [`${prefix}${key.charAt(0).toUpperCase()}${key.slice(1)}`, value]));
-                      
+
                     const mergedRoleOptions: any = {
                         ...addPrefix(oldRole, "old"),
                         ...addPrefix(newRole, "new")
@@ -219,7 +226,7 @@ export class DiscordTrigger implements INodeType {
 
                 // remove the node from being executed
                 console.log("removing trigger node");
-                
+
                 delete settings.triggerNodes[this.getNode().id];
 
                 // Send message to bot process to deregister this node

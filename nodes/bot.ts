@@ -293,7 +293,7 @@ export default function () {
         let messageReference: Message | null = null;
         let messageRerenceFetched = !(message.reference);
 
-        // iterate through all nodes and see if we need to trigger some                
+        // iterate through all nodes and see if we need to trigger some
         for (const [nodeId, parameters] of Object.entries(settings.triggerNodes) as [string, any]) {
             try {
                 if ('message' !== parameters.type)
@@ -367,7 +367,7 @@ export default function () {
                 if ((pattern === "botMention" && botMention) || reg.test(message.content)) {
                     // Emit the message data to n8n
 
-                    // message create Options 
+                    // message create Options
                     const messageCreateOptions : any = {
                         message,
                         messageReference,
@@ -376,13 +376,13 @@ export default function () {
                         author: message.author,
                         nodeId: nodeId,
                     }
-                    
+
                     // check attachments
                     if (onlyWithAttachments && !message.attachments) continue;
-                    
+
                     console.log("attachments", message.attachments);
                     messageCreateOptions.attachments = message.attachments;
-                    
+
                     ipc.server.emit(parameters.socket, 'messageCreate', messageCreateOptions);
                 }
 
@@ -513,6 +513,7 @@ export default function () {
                                 ipc.server.emit(socket, 'credentials', 'ready');
                             })
                             .catch((e) => {
+																console.error("Connect error", e);
                                 settings.login = false;
                                 ipc.server.emit(socket, 'credentials', 'error');
                             });
