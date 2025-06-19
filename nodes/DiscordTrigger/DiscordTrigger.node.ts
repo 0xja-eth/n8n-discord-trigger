@@ -34,7 +34,7 @@ export class DiscordTrigger implements INodeType {
         },
         icon: 'file:discord-logo.svg',
         inputs: [],
-        outputs: ['main'],
+        outputs: ['main'] as any,
         credentials: [
             {
                 name: 'discordBotTriggerApi',

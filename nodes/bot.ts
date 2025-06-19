@@ -47,6 +47,8 @@ export default function () {
         client.on('messageCreate', onMessageCreate);
     });
 
+	client.on('channelCreate', channel => {});
+
     client.on('guildMemberAdd', (guildMember) => {
         for (const [nodeId, parameters] of Object.entries(settings.triggerNodes) as [string, any]) {
             try {

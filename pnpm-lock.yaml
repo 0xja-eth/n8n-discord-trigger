@@ -33,6 +33,9 @@ importers:
       gulp:
         specifier: ^4.0.2
         version: 4.0.2
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.0
       n8n-core:
         specifier: ^0.125.0
         version: 0.125.0
