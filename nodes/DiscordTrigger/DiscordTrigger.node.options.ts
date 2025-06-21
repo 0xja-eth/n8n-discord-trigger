@@ -43,6 +43,11 @@ export const options: INodeProperties[] = [
 				description: 'When an existing role is updated on the server',
 			},
       {
+        name: 'Channel Create',
+        value: 'channel-create',
+        description: 'When a new channel is created on the server',
+      },
+      {
 				name: 'User Join',
 				value: 'user-join',
 				description: 'When a user joins the server',
@@ -63,7 +68,7 @@ export const options: INodeProperties[] = [
     type: 'multiOptions',
     displayOptions: {
       show: {
-        type: ['message', 'user-join', 'user-leave', 'message-reaction-add', 'message-reaction-remove', 'role-create', 'role-delete', 'role-update'],
+        type: ['message', 'user-join', 'user-leave', 'message-reaction-add', 'message-reaction-remove', 'role-create', 'role-delete', 'role-update', 'channel-create'],
       },
     },
     typeOptions: {

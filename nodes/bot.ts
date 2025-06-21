@@ -47,7 +47,26 @@ export default function () {
         client.on('messageCreate', onMessageCreate);
     });
 
-	client.on('channelCreate', channel => {});
+    client.on('channelCreate', (channel) => {
+        for (const [nodeId, parameters] of Object.entries(settings.triggerNodes) as [string, any]) {
+            try {
+                if ('channel-create' !== parameters.type)
+                    continue;
+
+                if (parameters.guildIds.length && !parameters.guildIds.includes(channel.guild.id))
+                    continue;
+
+                ipc.server.emit(parameters.socket, 'channelCreate', {
+                    channel: channel,
+                    guild: channel.guild,
+                    nodeId: nodeId
+                });
+
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    });
 
     client.on('guildMemberAdd', (guildMember) => {
         for (const [nodeId, parameters] of Object.entries(settings.triggerNodes) as [string, any]) {

@@ -188,6 +188,15 @@ export class DiscordTrigger implements INodeType {
                 }
             });
 
+            // Listen for new channel creation events
+            ipc.of.bot.on('channelCreate', ({channel, guild, nodeId}) => {
+                if (this.getNode().id === nodeId) {
+                    this.emit([
+                        this.helpers.returnJsonArray(channel),
+                    ]);
+                }
+            });
+
             ipc.of.bot.on('roleDelete', ({role, guild, nodeId}) => {
                 if( this.getNode().id === nodeId) {
                     this.emit([
